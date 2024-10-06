@@ -1,0 +1,150 @@
+<script src="./head.js"></script>
+<style>
+    .layui-card:last-child{
+        background-color: #f7f8fa;
+    }
+    .layui-card-header{
+        border-bottom: 1px solid #e6e6e6;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-col-md12" style="padding: 20px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        当天操作
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge" style="background-color:#4C84FF!important; ">制作</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">0</p>
+                        <p>
+                            总操作次数
+                            <span class="layuiadmin-span-color">0<i class="layui-inline layui-icon layui-icon-face-smile"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        当天新增
+                        <span class="layui-badge layui-bg-cyan layuiadmin-badge">用户</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">0</p>
+                        <p>
+                            总用户数量
+                            <span class="layuiadmin-span-color">0<i class="layui-inline layui-icon layui-icon-username"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        证件照
+                        <span class="layui-badge layui-bg-orange layuiadmin-badge">证件照</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">0</p>
+                        <p>
+                            证件照类型总数量（包含用户自定义）
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="margin-top:20px;padding: 10px;">
+        <div id="main" style="width: 100%;height:400px;"></div>
+    </div>
+</div>
+<script src="../statics/lib/echarts.min.js"></script>
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main'));
+ $.ajax({
+     url: domain + 'admin/adminIndex',
+     type: 'POST',
+     headers: {
+         'token': localStorage.getItem('token')
+     },
+     success: function(data) {
+		 console.log(data)
+         if (data.code == 200) {
+			 document.querySelectorAll('.layuiadmin-big-font')[0].innerHTML = data.data.makeNum;
+			 document.querySelectorAll('.layuiadmin-span-color')[0].innerHTML = data.data.makeTotal;
+			 document.querySelectorAll('.layuiadmin-big-font')[1].innerHTML = data.data.userNum;
+			 document.querySelectorAll('.layuiadmin-span-color')[1].innerHTML = data.data.userTotal;
+			 document.querySelectorAll('.layuiadmin-big-font')[2].innerHTML = data.data.itemTotal;
+             var option = {
+                 title: {
+                     text: '最近7日统计'
+                 },
+                 tooltip: {},
+                 xAxis: {
+                     type: 'category',
+                     boundaryGap: true,
+                     axisLine: {
+                         lineStyle: {
+                             color: '#999',
+                         }
+                     },
+                     data: data.data.chartDataVo.time
+                 },
+                 yAxis: {
+                     type: 'value',
+                     boundaryGap: [0, '20%'],
+                     axisLine: {
+                         lineStyle: {
+                             color: '#999',
+                         }
+                     },
+                     splitLine: {
+                         lineStyle: {
+                             width: 1,
+                             type: 'dashed',
+                             color: '#ccc',
+                         }
+                     }
+                 },
+                 grid: {
+                     left: '1%',
+                     right: '3%',
+                     bottom: '2%',
+                     containLabel: true
+                 },
+                 series: [{
+                     name: '制作次数',
+                     type: 'line',
+                     barWidth: '30%',
+                     smooth: true,
+                     itemStyle: {
+                         normal: {
+                             color: '#c23531',
+                             lineStyle: {
+                                 width:1
+                             },
+                             label: {
+                                 show: true,
+                                 position: 'top',
+                                 textStyle: {
+                                     color: 'black',
+                                     fontSize: 16
+                                 }
+                             }
+                         }
+                     },
+                     data: data.data.chartDataVo.data
+                 }]
+             };
+             myChart.setOption(option);
+         }else{
+			 localStorage.setItem('token', null);
+			location.href = "/index.html";
+		}
+     }
+ });
+</script>
+<script src="./foot.js"></script>

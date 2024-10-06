@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>管理员登录</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="statics/css/site.css">
+	<script src="statics/web.js"></script>
+	<script src="statics/lib/jquery.min.js"></script>
+	<script src="statics/lib/layui/layui.all.js"></script>
+    <script>
+    </script>
+    <style>
+        /* 通用页面布局 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f2f5;
+			background:#ecedf0 url("statics/images/bj.png") fixed;
+			background-repeat:repeat;
+        }
+
+        .layadmin-user-login-main {
+            width: 680px;
+		    height: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .layadmin-user-login-header h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .layadmin-user-login-body p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .layadmin-user-login-body p img {
+            width: 55px;
+            height: 45px
+            margin-left: 10px;
+        }
+
+        .layadmin-user-login-body img.qr-code {
+            display: block;
+            margin: 0 auto;
+            width: 300px;
+            height: 300px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .layadmin-user-login-main {
+                width: 300px;
+                padding: 20px;
+            }
+            
+            .layadmin-user-login-body img.qr-code {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layadmin-user-login-main">
+    <div class="layadmin-user-login-header">
+        <h2>登录</h2>
+    </div>
+    <div class="layadmin-user-login-body layui-form">
+        <p>请使用微信扫一扫&nbsp; <img src="statics/images/img-4.gif" alt="Scan Icon"/></p>
+        <img class="qr-code" src="" alt="登录二维码加载中..."/>
+    </div>
+</div>
+<script>
+  var token = localStorage.getItem('token2');
+	if(token!=null){
+		location.href = "user/index.html";
+	}
+    $.get(domain + "admin/login", {}, function(data) {
+        if (data.code == 200) {
+            $('.qr-code').attr('src', data.data.pic);
+			startCheckLogin(data.data.code);  // 开始检查登录状态
+			
+        } else {
+            layer.msg("二维码获取失败，请刷新重试");
+        }
+    });
+	
+	    function startCheckLogin(code) {
+	        const interval = setInterval(function() {
+	            $.get(domain + "admin/checkLogin", {code:code}, function(data) {
+	                if (data.code == 200) {
+	                    clearInterval(interval);
+						localStorage.setItem('token', data.data);
+						layer.msg("登录成功，正在跳转中...", {time: 1500}, function(){
+						location.href = "user/index.html";
+						});
+	                }
+	            });
+	        }, 1000);
+	    }
+</script>
+
+</body>
+</html>

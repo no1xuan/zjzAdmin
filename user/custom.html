@@ -1,0 +1,120 @@
+<script src="./head.js"></script>
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+
+<div class="layui-fluid">
+    <form class="layui-form" lay-filter="userSearch" action="">
+        <div class="layui-row" style="padding: 5px 10px;">
+            <div class="layui-col-md4">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
+                <i class="layui-icon">&#xe615;</i>筛选
+            </button>
+        </div>
+    </form>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <!-- 表格容器 -->
+                    <table class="layui-hide" id="table" lay-filter="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加分页容器 -->
+<div id="pagination"></div>
+
+<script>
+    layui.use(['table', 'form', 'laypage'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laypage = layui.laypage;
+
+        var pageNum = 1;   // 当前页码
+        var pageSize = 15; // 每页显示数量
+        var name = '';     // 搜索关键词
+
+        function loadTable() {
+            $.ajax({
+                type: 'POST',
+                url: domain+'admin/getCustomPage',
+                data: {
+                    pageNum: pageNum,
+                    pageSize: pageSize,
+                    name: name
+                },
+                headers: {
+                    'token': localStorage.getItem('token')
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code === 200) {
+                        // 渲染表格
+                        table.render({
+                            elem: '#table',
+                            data: res.data.records,
+                            cols: [[
+                                {field: 'id', title: '编号', width: 100},
+                                {field: 'name', title: '名称'},
+                                {field: 'widthPx', title: '宽（像素）'},
+                                {field: 'heightPx', title: '高（像素）'},
+                                {field: 'widthMm', title: '宽（尺寸）'},
+                                {field: 'heightMm', title: '高（尺寸）'},
+                                {title: '像素', templet: function(d){ return d.dpi + ' DPI'; }},
+								{field: 'userId', title: '用户ID'},
+								{field: 'createTime', title: '创建时间'}
+                            ]],
+
+                            limit: pageSize,
+                            page: false,
+                            id: 'tableId'
+                        });
+
+                        // 渲染分页
+                        laypage.render({
+                            elem: 'pagination',             
+                            curr: res.data.current,         
+                            count: res.data.total,          
+                            limit: res.data.size,           
+                            limits: [15, 30, 50],           
+                            layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+                            jump: function(obj, first){
+                                if(!first){
+                                    pageNum = obj.curr;     
+                                    pageSize = obj.limit;   
+                                    loadTable();            
+                                }
+                            }
+                        });
+                    }else{
+					location.href = "/index.html";
+					}
+                }
+            });
+        }
+
+        // 初次加载表格数据
+        loadTable();
+
+        // 搜索表单提交事件
+        form.on('submit(search)', function (data) {
+            var where = data.field;
+            name = where.name || ''; 
+            pageNum = 1;             
+            loadTable();             
+        });
+
+    });
+</script>
+<script src="./foot.js"></script>

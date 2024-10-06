@@ -1,0 +1,138 @@
+<script src="./head.js"></script>
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: normal;
+    }
+</style>
+
+<div class="layui-fluid">
+    <form class="layui-form" lay-filter="userSearch" action="">
+        <div class="layui-row" style="padding: 5px 10px;">
+            <div class="layui-col-md4">
+                <label class="layui-form-label">规格名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
+                <i class="layui-icon">&#xe615;</i>筛选
+            </button>
+        </div>
+    </form>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <!-- 表格容器 -->
+                    <table class="layui-hide" id="table" lay-filter="tableFilter"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加分页容器 -->
+<div id="pagination"></div>
+
+<script>
+    layui.use(['table', 'form', 'laypage', 'layer'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laypage = layui.laypage,
+            layer = layui.layer;
+
+        var pageNum = 1;   // 当前页码
+        var pageSize = 15; // 每页显示数量
+        var name = '';     // 搜索关键词
+
+        function loadTable() {
+            $.ajax({
+                type: 'POST',
+                url: domain + 'admin/getPhotoPage',
+                data: {
+                    pageNum: pageNum,
+                    pageSize: pageSize,
+                    name: name
+                },
+                headers: {
+                    'token': localStorage.getItem('token')
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code === 200) {
+                        // 渲染表格
+                        table.render({
+                            elem: '#table',
+                            data: res.data.records,
+                            cols: [[
+                                {field: 'id', title: '编号', width: 100},
+                                {field: 'name', title: '规格'},
+                                {field: 'nimg', title: '保存图', width: 100, templet: function(d){
+                                    return '<button class="layui-btn layui-btn-xs" lay-event="view">查看</button>';
+                                }},
+                                {field: 'size', title: '尺寸'},
+                                {field: 'userId', title: '用户ID'},
+                                {field: 'createTime', title: '创建时间'}
+                            ]],
+                            limit: pageSize,
+                            page: false,
+                            id: 'tableId'
+                        });
+
+                        // 监听表格工具事件
+                        table.on('tool(tableFilter)', function(obj){
+                            var data = obj.data;
+                            var event = obj.event;
+                            if(event === 'view'){
+                                // 弹出确认对话框
+                                layer.confirm('照片属于用户的隐私信息，因此网站运营者必须严格遵守相关法律法规，确保不嘲讽、侮辱、羞辱、滥用、泄露、篡改、非法利用等。此外，网站运营者应采取一切必要措施来保护个人数据的隐私和数据安全', {icon: 3, title:'提示'}, function(index){
+                                    layer.close(index);
+                                    // 显示图片
+                                    layer.open({
+                                        type: 1,
+                                        title: '图片查看',
+                                        area: ['360px', '480px'],  // 调整为适合证件照的尺寸
+                                        content: '<img src="'+data.nimg+'" style="width: 100%; height: auto; max-height: 100%;">'
+                                    });
+                                });
+                            }
+                        });
+
+                        // 渲染分页
+                        laypage.render({
+                            elem: 'pagination',             
+                            curr: res.data.current,         
+                            count: res.data.total,          
+                            limit: res.data.size,           
+                            limits: [15, 30, 50],           
+                            layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+                            jump: function(obj, first){
+                                if(!first){
+                                    pageNum = obj.curr;     
+                                    pageSize = obj.limit;   
+                                    loadTable();            
+                                }
+                            }
+                        });
+                    }else{
+				     	location.href = "/index.html";
+					}
+                }
+            });
+        }
+
+        // 初次加载表格数据
+        loadTable();
+
+        // 搜索表单提交事件
+        form.on('submit(search)', function (data) {
+            var where = data.field;
+            name = where.name || ''; 
+            pageNum = 1;             
+            loadTable();             
+        });
+
+    });
+</script>
+<script src="./foot.js"></script>

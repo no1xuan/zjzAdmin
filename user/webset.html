@@ -1,0 +1,142 @@
+<script src="./head.js"></script>
+<style>
+    .layui-form-label {
+        width: 160px;
+        font-size: 14px;
+        color: #353535;
+        padding: 9px;
+    }
+    .layui-input-block {
+        margin-left: 190px;
+        width: 50%;
+    }
+</style>
+<form class="layui-form">
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <input type="hidden" name="id">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">系统设置</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-form-item" style="">
+                            <label class="layui-form-label">小程序AppId</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="app_id" value="" required  lay-verType="tips"	lay-verify="required" placeholder="请输入小程序AppId"  class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="">
+                            <label class="layui-form-label">小程序AppSecret</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="app_secret" value="" required  lay-verType="tips"	lay-verify="required" placeholder="请输入小程序AppSecret"   class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">鉴黄</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="safety_api" value="1" title="关闭"  />
+                                <input type="radio" name="safety_api" value="2" title="开启"  />
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">普通下载</label>
+                            <div class="layui-input-block">
+                             <input type="radio" name="download_one" value="1" title="关闭广告" />
+                             <input type="radio" name="download_one" value="2" title="开启广告"  />
+							 </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">高清下载</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="download_two" value="1" title="关闭广告" />
+                                <input type="radio" name="download_two" value="2" title="开启广告"  />
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">广告位ID（激励视频）</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="video_unit_id" value="0" class="layui-input"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="L_repass" class="layui-form-label"></label>
+                            <button class="layui-btn layui-btn-blue" type="button" lay-filter="save" lay-submit>
+                                确认保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    layui.use(['form', 'layer', 'jquery'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: domain+'admin/getWebSet',
+                headers: {
+                    'token': localStorage.getItem('token')
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        var data = res.data;
+                        $("input[name='app_id']").val(data.appId);
+                        $("input[name='app_secret']").val(data.appSecret);
+                        $("input[name='video_unit_id']").val(data.videoUnitId);
+                        $("input[name='safety_api'][value='" + data.safetyApi + "']").prop("checked", true);
+                        $("input[name='download_one'][value='" + data.downloadOne + "']").prop("checked", true);
+                        $("input[name='download_two'][value='" + data.downloadTwo + "']").prop("checked", true);
+
+                        form.render('radio');
+                    } else if(res.code==404) {
+                        layer.alert(res.data);
+                    }else{
+					location.href = "/index.html";
+					}
+                }
+            });
+        });
+        form.on('submit(save)', function (data) {
+            var postData = {
+                appId: $("input[name='app_id']").val(),
+                appSecret: $("input[name='app_secret']").val(),
+                videoUnitId: $("input[name='video_unit_id']").val(),
+                safetyApi: $("input[name='safety_api']:checked").val(),
+                downloadOne: $("input[name='download_one']:checked").val(),
+                downloadTwo: $("input[name='download_two']:checked").val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: domain+'admin/updateWebSet',
+                contentType: 'application/json',
+                data: JSON.stringify(postData),
+                dataType: 'json',
+				headers: {
+				    'token': localStorage.getItem('token')
+				},
+                success: function (response) {
+                    if (response.code === 200) {
+                        layer.msg('保存成功');
+                    }else{
+					    location.href = "/index.html";
+					}
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+
+<script src="./foot.js"></script>
