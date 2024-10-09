@@ -1,20 +1,21 @@
 # 项目介绍
 
 # <p align="center">小程序管理员后台</p>
-<p align="center">一码连接你的小程序，数据增长了如指掌</p>
+<p align="center">一码连接小程序，数据增长了如指掌</p>
 <p align="center"><img src="./img/1.png"></p>
 
 
 
 **相关项目**：
 
-- 小程序后端请前往：https://github.com/no1xuan/zjzWx
 - 小程序前端请前往：https://github.com/no1xuan/photo
+- 小程序后端请前往：https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp
+
 
 ------
 
 # ⭐最近更新
-- 2024.10.07：更新管理员后台，从此版本开始为长期稳定版本，基本频繁不会更新
+- 2024.10.07：更新管理员后台，从此版本开始为长期稳定版本，基本不会频繁更新
 
 <hr>
 <br>
@@ -44,7 +45,7 @@
 
 管理员后台模板借鉴了【郑州市鹧应网络科技有限责任公司】旗下的鹧应证件照：https://zjzapi.com
 <br>
-如侵犯到贵公司，十分抱歉，请与我联系，我将会删除源代码
+如侵犯到贵公司，十分抱歉，请与我联系，我将删除源代码
 
 <hr>
 <br>
