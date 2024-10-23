@@ -1,7 +1,7 @@
 document.writeln("<!DOCTYPE html>");
-document.writeln("<html>");
+document.writeln("<html lang=\'zh-CN\'>");
 document.writeln("<head>");
-document.writeln("    <meta charset=\'utf-8\'>");
+document.writeln("    <meta charset=\'UTF-8\'>");
 document.writeln("    <title>管理员中心</title>");
 document.writeln("    <meta name=\'renderer\' content=\'webkit\'>");
 document.writeln("    <meta http-equiv=\'X-UA-Compatible\' content=\'IE=edge,chrome=1\'>");
@@ -10,7 +10,7 @@ document.writeln("    <link rel=\'stylesheet\' href=\'../statics/lib/layui/css/l
 document.writeln("    <link rel=\'stylesheet\' href=\'../statics/css/site.css\'>");
 document.writeln("    <script src=\'../statics/web.js\'></script>");
 document.writeln("    <script src=\'../statics/lib/jquery.min.js\'></script>");
-document.writeln("    <script src=\'../statics/lib/layui/layui.all.js\'></script>");
+document.writeln("    <script src=\'../statics/lib/layui/layui.all.js\' charset=\'utf-8\'></script>");
 document.writeln("    <style>");
 document.writeln("        .layui-icon-login-wechat{");
 document.writeln("            color: #777;");

@@ -1,4 +1,4 @@
-<script src="./head.js"></script>
+<script src="./head.js" charset="utf-8"></script>
 <style>
     .layui-form-label {
         width: 160px;
@@ -18,45 +18,45 @@
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                 <input type="hidden" name="id">
                 <ul class="layui-tab-title">
-                    <li class="layui-this">Á≥ªÁªüËÆæÁΩÆ</li>
+                    <li class="layui-this">œµÕ≥…Ë÷√</li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
                         <div class="layui-form-item" style="">
-                            <label class="layui-form-label">Â∞èÁ®ãÂ∫èAppId</label>
+                            <label class="layui-form-label">–°≥Ã–ÚAppId</label>
                             <div class="layui-input-block">
-                                <input type="text" name="app_id" value="" required  lay-verType="tips"	lay-verify="required" placeholder="ËØ∑ËæìÂÖ•Â∞èÁ®ãÂ∫èAppId"  class="layui-input"/>
+                                <input type="text" name="app_id" value="" required  lay-verType="tips"	lay-verify="required" placeholder="«Î ‰»Î–°≥Ã–ÚAppId"  class="layui-input"/>
                             </div>
                         </div>
                         <div class="layui-form-item" style="">
-                            <label class="layui-form-label">Â∞èÁ®ãÂ∫èAppSecret</label>
+                            <label class="layui-form-label">–°≥Ã–ÚAppSecret</label>
                             <div class="layui-input-block">
-                                <input type="text" name="app_secret" value="" required  lay-verType="tips"	lay-verify="required" placeholder="ËØ∑ËæìÂÖ•Â∞èÁ®ãÂ∫èAppSecret"   class="layui-input"/>
+                                <input type="text" name="app_secret" value="" required  lay-verType="tips"	lay-verify="required" placeholder="«Î ‰»Î–°≥Ã–ÚAppSecret"   class="layui-input"/>
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">Èâ¥ÈªÑ</label>
+                            <label class="layui-form-label">º¯ª∆</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="safety_api" value="1" title="ÂÖ≥Èó≠"  />
-                                <input type="radio" name="safety_api" value="2" title="ÂºÄÂêØ"  />
+                                <input type="radio" name="safety_api" value="1" title="πÿ±’"  />
+                                <input type="radio" name="safety_api" value="2" title="ø™∆Ù"  />
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">ÊôÆÈÄö‰∏ãËΩΩ</label>
+                            <label class="layui-form-label">∆’Õ®œ¬‘ÿ</label>
                             <div class="layui-input-block">
-                             <input type="radio" name="download_one" value="1" title="ÂÖ≥Èó≠ÂπøÂëä" />
-                             <input type="radio" name="download_one" value="2" title="ÂºÄÂêØÂπøÂëä"  />
+                             <input type="radio" name="download_one" value="1" title="πÿ±’π„∏Ê" />
+                             <input type="radio" name="download_one" value="2" title="ø™∆Ùπ„∏Ê"  />
 							 </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">È´òÊ∏Ö‰∏ãËΩΩ</label>
+                            <label class="layui-form-label">∏ﬂ«Âœ¬‘ÿ</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="download_two" value="1" title="ÂÖ≥Èó≠ÂπøÂëä" />
-                                <input type="radio" name="download_two" value="2" title="ÂºÄÂêØÂπøÂëä"  />
+                                <input type="radio" name="download_two" value="1" title="πÿ±’π„∏Ê" />
+                                <input type="radio" name="download_two" value="2" title="ø™∆Ùπ„∏Ê"  />
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">ÂπøÂëä‰ΩçIDÔºàÊøÄÂä±ËßÜÈ¢ëÔºâ</label>
+                            <label class="layui-form-label">π„∏ÊŒªID£®º§¿¯ ”∆µ£©</label>
                             <div class="layui-input-block">
                                 <input type="text" name="video_unit_id" value="0" class="layui-input"/>
                             </div>
@@ -64,7 +64,7 @@
                         <div class="layui-form-item">
                             <label for="L_repass" class="layui-form-label"></label>
                             <button class="layui-btn layui-btn-blue" type="button" lay-filter="save" lay-submit>
-                                Á°ÆËÆ§‰øùÂ≠ò
+                                »∑»œ±£¥Ê
                             </button>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
 				},
                 success: function (response) {
                     if (response.code === 200) {
-                        layer.msg('‰øùÂ≠òÊàêÂäü');
+                        layer.msg('±£¥Ê≥…π¶');
                     }else{
 					    location.href = "/index.html";
 					}
@@ -139,4 +139,4 @@
 </script>
 
 
-<script src="./foot.js"></script>
+<script src="./foot.js" charset="utf-8"></script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <title>管理员登录</title>
@@ -88,7 +88,8 @@
 </div>
 <script>
   var token = localStorage.getItem('token');
-	if(token!=null){
+	if(token!=null && token!='null'){
+	   console.log(token);
 		location.href = "user/index.html";
 	}
     $.get(domain + "admin/login", {}, function(data) {

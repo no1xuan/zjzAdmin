@@ -1,4 +1,4 @@
-<script src="./head.js"></script>
+<script src="./head.js" charset="utf-8"></script>
 <style>
     .layui-table-cell {
         height: auto;
@@ -10,13 +10,13 @@
     <form class="layui-form" lay-filter="userSearch" action="">
         <div class="layui-row" style="padding: 5px 10px;">
             <div class="layui-col-md4">
-                <label class="layui-form-label">è§„æ ¼åç§°</label>
+                <label class="layui-form-label">¹æ¸ñÃû³Æ</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" placeholder="è¯·è¾“å…¥" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" placeholder="ÇëÊäÈë" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
-                <i class="layui-icon">&#xe615;</i>ç­›é€‰
+                <i class="layui-icon">&#xe615;</i>É¸Ñ¡
             </button>
         </div>
     </form>
@@ -24,7 +24,7 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body">
-                    <!-- è¡¨æ ¼å®¹å™¨ -->
+                    <!-- ±í¸ñÈİÆ÷ -->
                     <table class="layui-hide" id="table" lay-filter="table"></table>
                 </div>
             </div>
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<!-- æ·»åŠ åˆ†é¡µå®¹å™¨ -->
+<!-- Ìí¼Ó·ÖÒ³ÈİÆ÷ -->
 <div id="pagination"></div>
 
 <script>
@@ -41,9 +41,9 @@
             form = layui.form,
             laypage = layui.laypage;
 
-        var pageNum = 1;   // å½“å‰é¡µç 
-        var pageSize = 15; // æ¯é¡µæ˜¾ç¤ºæ•°é‡
-        var name = '';     // æœç´¢å…³é”®è¯
+        var pageNum = 1;   // µ±Ç°Ò³Âë
+        var pageSize = 15; // Ã¿Ò³ÏÔÊ¾ÊıÁ¿
+        var name = '';     // ËÑË÷¹Ø¼ü´Ê
 
         function loadTable() {
             $.ajax({
@@ -60,23 +60,23 @@
                 dataType: 'json',
                 success: function (res) {
                     if (res.code === 200) {
-                        // æ¸²æŸ“è¡¨æ ¼
+                        // äÖÈ¾±í¸ñ
                         table.render({
                             elem: '#table',
                             data: res.data.records,
                             cols: [[
-                                {field: 'id', title: 'ç¼–å·', width: 100},
-                                {field: 'name', title: 'è§„æ ¼'},
-                                {field: 'widthPx', title: 'å®½ï¼ˆåƒç´ ï¼‰'},
-                                {field: 'heightPx', title: 'é«˜ï¼ˆåƒç´ ï¼‰'},
-                                {field: 'widthMm', title: 'å®½ï¼ˆå°ºå¯¸ï¼‰'},
-                                {field: 'heightMm', title: 'é«˜ï¼ˆå°ºå¯¸ï¼‰'},
-                                {title: 'åƒç´ ', templet: function(d){ return d.dpi + ' DPI'; }},
-                                {title: 'åˆ†ç±»', templet: function(d){
+                                {field: 'id', title: '±àºÅ', width: 100},
+                                {field: 'name', title: '¹æ¸ñ'},
+                                {field: 'widthPx', title: '¿í£¨ÏñËØ£©'},
+                                {field: 'heightPx', title: '¸ß£¨ÏñËØ£©'},
+                                {field: 'widthMm', title: '¿í£¨³ß´ç£©'},
+                                {field: 'heightMm', title: '¸ß£¨³ß´ç£©'},
+                                {title: 'ÏñËØ', templet: function(d){ return d.dpi + ' DPI'; }},
+                                {title: '·ÖÀà', templet: function(d){
                                     var categoryMap = {
-                                        1: 'å¸¸ç”¨å¯¸ç…§',
-                                        2: 'å„ç±»ç­¾è¯',
-                                        3: 'å„ç±»è¯ä»¶'
+                                        1: '³£ÓÃ´çÕÕ',
+                                        2: '¸÷ÀàÇ©Ö¤',
+                                        3: '¸÷ÀàÖ¤¼ş'
                                     };
                                     return categoryMap[d.category];
                                 }}
@@ -87,7 +87,7 @@
                             id: 'tableId'
                         });
 
-                        // æ¸²æŸ“åˆ†é¡µ
+                        // äÖÈ¾·ÖÒ³
                         laypage.render({
                             elem: 'pagination',             
                             curr: res.data.current,         
@@ -110,10 +110,10 @@
             });
         }
 
-        // åˆæ¬¡åŠ è½½è¡¨æ ¼æ•°æ®
+        // ³õ´Î¼ÓÔØ±í¸ñÊı¾İ
         loadTable();
 
-        // æœç´¢è¡¨å•æäº¤äº‹ä»¶
+        // ËÑË÷±íµ¥Ìá½»ÊÂ¼ş
         form.on('submit(search)', function (data) {
             var where = data.field;
             name = where.name || ''; 
@@ -123,4 +123,4 @@
 
     });
 </script>
-<script src="./foot.js"></script>
+<script src="./foot.js" charset="utf-8"></script>

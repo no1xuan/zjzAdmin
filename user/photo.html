@@ -1,4 +1,4 @@
-<script src="./head.js"></script>
+<script src="./head.js" charset="utf-8"></script>
 <style>
     .layui-table-cell {
         height: auto;
@@ -10,13 +10,13 @@
     <form class="layui-form" lay-filter="userSearch" action="">
         <div class="layui-row" style="padding: 5px 10px;">
             <div class="layui-col-md4">
-                <label class="layui-form-label">è§„æ ¼åç§°</label>
+                <label class="layui-form-label">¹æ¸ñÃû³Æ</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" placeholder="è¯·è¾“å…¥" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" placeholder="ÇëÊäÈë" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
-                <i class="layui-icon">&#xe615;</i>ç­›é€‰
+                <i class="layui-icon">&#xe615;</i>É¸Ñ¡
             </button>
         </div>
     </form>
@@ -24,7 +24,7 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body">
-                    <!-- è¡¨æ ¼å®¹å™¨ -->
+                    <!-- ±í¸ñÈİÆ÷ -->
                     <table class="layui-hide" id="table" lay-filter="tableFilter"></table>
                 </div>
             </div>
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<!-- æ·»åŠ åˆ†é¡µå®¹å™¨ -->
+<!-- Ìí¼Ó·ÖÒ³ÈİÆ÷ -->
 <div id="pagination"></div>
 
 <script>
@@ -42,9 +42,9 @@
             laypage = layui.laypage,
             layer = layui.layer;
 
-        var pageNum = 1;   // å½“å‰é¡µç 
-        var pageSize = 15; // æ¯é¡µæ˜¾ç¤ºæ•°é‡
-        var name = '';     // æœç´¢å…³é”®è¯
+        var pageNum = 1;   // µ±Ç°Ò³Âë
+        var pageSize = 15; // Ã¿Ò³ÏÔÊ¾ÊıÁ¿
+        var name = '';     // ËÑË÷¹Ø¼ü´Ê
 
         function loadTable() {
             $.ajax({
@@ -61,45 +61,45 @@
                 dataType: 'json',
                 success: function (res) {
                     if (res.code === 200) {
-                        // æ¸²æŸ“è¡¨æ ¼
+                        // äÖÈ¾±í¸ñ
                         table.render({
                             elem: '#table',
                             data: res.data.records,
                             cols: [[
-                                {field: 'id', title: 'ç¼–å·', width: 100},
-                                {field: 'name', title: 'è§„æ ¼'},
-                                {field: 'nimg', title: 'ä¿å­˜å›¾', width: 100, templet: function(d){
-                                    return '<button class="layui-btn layui-btn-xs" lay-event="view">æŸ¥çœ‹</button>';
+                                {field: 'id', title: '±àºÅ', width: 100},
+                                {field: 'name', title: '¹æ¸ñ'},
+                                {field: 'nimg', title: '±£´æÍ¼', width: 100, templet: function(d){
+                                    return '<button class="layui-btn layui-btn-xs" lay-event="view">²é¿´</button>';
                                 }},
-                                {field: 'size', title: 'å°ºå¯¸'},
-                                {field: 'userId', title: 'ç”¨æˆ·ID'},
-                                {field: 'createTime', title: 'åˆ›å»ºæ—¶é—´'}
+                                {field: 'size', title: '³ß´ç'},
+                                {field: 'userId', title: 'ÓÃ»§ID'},
+                                {field: 'createTime', title: '´´½¨Ê±¼ä'}
                             ]],
                             limit: pageSize,
                             page: false,
                             id: 'tableId'
                         });
 
-                        // ç›‘å¬è¡¨æ ¼å·¥å…·äº‹ä»¶
+                        // ¼àÌı±í¸ñ¹¤¾ßÊÂ¼ş
                         table.on('tool(tableFilter)', function(obj){
                             var data = obj.data;
                             var event = obj.event;
                             if(event === 'view'){
-                                // å¼¹å‡ºç¡®è®¤å¯¹è¯æ¡†
-                                layer.confirm('ç…§ç‰‡å±äºç”¨æˆ·çš„éšç§ä¿¡æ¯ï¼Œå› æ­¤ç½‘ç«™è¿è¥è€…å¿…é¡»ä¸¥æ ¼éµå®ˆç›¸å…³æ³•å¾‹æ³•è§„ï¼Œç¡®ä¿ä¸å˜²è®½ã€ä¾®è¾±ã€ç¾è¾±ã€æ»¥ç”¨ã€æ³„éœ²ã€ç¯¡æ”¹ã€éæ³•åˆ©ç”¨ç­‰ã€‚æ­¤å¤–ï¼Œç½‘ç«™è¿è¥è€…åº”é‡‡å–ä¸€åˆ‡å¿…è¦æªæ–½æ¥ä¿æŠ¤ä¸ªäººæ•°æ®çš„éšç§å’Œæ•°æ®å®‰å…¨', {icon: 3, title:'æç¤º'}, function(index){
+                                // µ¯³öÈ·ÈÏ¶Ô»°¿ò
+                                layer.confirm('ÕÕÆ¬ÊôÓÚÓÃ»§µÄÒşË½ĞÅÏ¢£¬Òò´ËÍøÕ¾ÔËÓªÕß±ØĞëÑÏ¸ñ×ñÊØÏà¹Ø·¨ÂÉ·¨¹æ£¬È·±£²»³°·í¡¢ÎêÈè¡¢ĞßÈè¡¢ÀÄÓÃ¡¢Ğ¹Â¶¡¢´Û¸Ä¡¢·Ç·¨ÀûÓÃµÈ¡£´ËÍâ£¬ÍøÕ¾ÔËÓªÕßÓ¦²ÉÈ¡Ò»ÇĞ±ØÒª´ëÊ©À´±£»¤¸öÈËÊı¾İµÄÒşË½ºÍÊı¾İ°²È«', {icon: 3, title:'ÌáÊ¾'}, function(index){
                                     layer.close(index);
-                                    // æ˜¾ç¤ºå›¾ç‰‡
+                                    // ÏÔÊ¾Í¼Æ¬
                                     layer.open({
                                         type: 1,
-                                        title: 'å›¾ç‰‡æŸ¥çœ‹',
-                                        area: ['360px', '480px'],  // è°ƒæ•´ä¸ºé€‚åˆè¯ä»¶ç…§çš„å°ºå¯¸
+                                        title: 'Í¼Æ¬²é¿´',
+                                        area: ['360px', '480px'],  // µ÷ÕûÎªÊÊºÏÖ¤¼şÕÕµÄ³ß´ç
                                         content: '<img src="'+data.nimg+'" style="width: 100%; height: auto; max-height: 100%;">'
                                     });
                                 });
                             }
                         });
 
-                        // æ¸²æŸ“åˆ†é¡µ
+                        // äÖÈ¾·ÖÒ³
                         laypage.render({
                             elem: 'pagination',             
                             curr: res.data.current,         
@@ -122,10 +122,10 @@
             });
         }
 
-        // åˆæ¬¡åŠ è½½è¡¨æ ¼æ•°æ®
+        // ³õ´Î¼ÓÔØ±í¸ñÊı¾İ
         loadTable();
 
-        // æœç´¢è¡¨å•æäº¤äº‹ä»¶
+        // ËÑË÷±íµ¥Ìá½»ÊÂ¼ş
         form.on('submit(search)', function (data) {
             var where = data.field;
             name = where.name || ''; 
@@ -135,4 +135,4 @@
 
     });
 </script>
-<script src="./foot.js"></script>
+<script src="./foot.js" charset="utf-8"></script>
