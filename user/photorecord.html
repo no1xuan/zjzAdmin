@@ -59,7 +59,7 @@
                 },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.code === 200) {
+                    if (res.code == 200) {
                         // 渲染表格
                         table.render({
                             elem: '#table',
@@ -67,6 +67,22 @@
                             cols: [[
                                 {field: 'id', title: '编号', width: 100},
                                 {field: 'name', title: '名称'},
+                                {field: 'type', title: '类型', templet: function(d){
+                                    var typeMap = {
+                                        0: '旧数据',
+                                        1: '生成证件照',
+                                        2: '生成高清证件照',
+                                        3: '换背景',
+                                        4: '下载证件照',
+                                        5: '老照片上色',
+                                        6: '智能抠图',
+                                        7: '六寸排版照',
+                                        8: '动漫风照',
+                                        9: '照片清晰增强',
+                                        10: '上传图片'
+                                    };
+                                    return typeMap[d.type];
+                                }},
 								{field: 'userId', title: '用户ID'},
 								{field: 'createTime', title: '创建时间'}
                             ]],
@@ -93,6 +109,7 @@
                             }
                         });
                     }else{
+                       localStorage.setItem('token', null);
 					   location.href = "/index.html";
 					}
                 }

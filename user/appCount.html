@@ -1,0 +1,172 @@
+<script src="./head.js" charset="utf-8"></script>
+<style>
+    .layui-card:last-child{
+        background-color: #f7f8fa;
+    }
+    .layui-card-header{
+        border-bottom: 1px solid #e6e6e6;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-col-md12" style="padding: 20px;">
+        <!-- 添加横幅提示 -->
+        <div class="layui-row" style="margin-bottom: 20px;">
+            <div class="layui-col-md12">
+                <div class="layui-card" style="background-color: #fff3cd; border: 1px solid #ffeeba;">
+                    <div class="layui-card-body" style="color: #856404;">
+                        <i class="layui-icon layui-icon-tips" style="margin-right: 8px;"></i>
+                        注意：本页面统计数据不包含旧数据
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        智能证件照
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="zjzCount">0</p>
+                        <p>
+                            证件照制作总次数（包含旧数据）
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-camera"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        六寸排版照
+                        <span class="layui-badge layui-bg-cyan layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="generateLayoutCount">0</p>
+                        <p>
+                            六寸排版照总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-layouts"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        老照片上色
+                        <span class="layui-badge layui-bg-green layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="colourizeCount">0</p>
+                        <p>
+                            老照片上色总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-picture-fine"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        智能抠图
+                        <span class="layui-badge layui-bg-orange layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="mattingCount">0</p>
+                        <p>
+                            智能抠图总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-picture"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        照片清晰增强
+                        <span class="layui-badge layui-bg-red layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="imageDefinitionEnhanceCount">0</p>
+                        <p>
+                            照片清晰增强总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-refresh"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        新海诚动漫风
+                        <span class="layui-badge layui-bg-red layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="cartoonCount">0</p>
+                        <p>
+                            新海诚动漫风总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-star"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        图片上传
+                        <span class="layui-badge layui-bg-red layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="imageuploadCount">0</p>
+                        <p>
+                            图片上传总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-upload"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        总使用量
+                        <span class="layui-badge layui-bg-red layuiadmin-badge">总量</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font" id="imageCount">0</p>
+                        <p>
+                            总使用量
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-chart"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$.ajax({
+    url: domain + 'admin/exploreIndexAdmin',
+    type: 'POST',
+    headers: {
+        'token': localStorage.getItem('token')
+    },
+    success: function(res) {
+        if (res.code == 200) {
+            document.getElementById('zjzCount').innerHTML = res.data.zjzCount;
+            document.getElementById('generateLayoutCount').innerHTML = res.data.generateLayoutCount;
+            document.getElementById('colourizeCount').innerHTML = res.data.colourizeCount;
+            document.getElementById('mattingCount').innerHTML = res.data.mattingCount;
+            document.getElementById('imageDefinitionEnhanceCount').innerHTML = res.data.imageDefinitionEnhanceCount;
+            document.getElementById('cartoonCount').innerHTML = res.data.cartoonCount;
+            document.getElementById('imageuploadCount').innerHTML = res.data.imageuploadCount;
+            document.getElementById('imageCount').innerHTML = res.data.imageCount;
+        } else {
+            layer.msg("数据加载失败");
+        }
+    }
+});
+</script>
+
+<script src="./foot.js" charset="utf-8"></script>

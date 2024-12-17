@@ -59,7 +59,7 @@
                 },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.code === 200) {
+                    if (res.code == 200) {
                         // ‰÷»æ±Ì∏Ò
                         table.render({
                             elem: '#table',
@@ -98,6 +98,7 @@
                             }
                         });
                     }else{
+                        localStorage.setItem('token', null);
 					location.href = "/index.html";
 					}
                 }

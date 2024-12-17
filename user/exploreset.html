@@ -1,0 +1,233 @@
+<script src="./head.js" charset="utf-8"></script>
+<style>
+    .settings-container {
+        max-width: 1200px;
+        padding: 40px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .feature-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #eee;
+        position: relative;
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        border-color: #4C84FF;
+    }
+
+    .feature-img {
+        width: 100%;
+        height: 140px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        object-fit: contain;
+    }
+
+    .feature-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .feature-status {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 12px;
+        gap: 10px;
+    }
+
+    .status-switch {
+        margin-left: 10px;
+    }
+
+    .feature-limit {
+        margin-top: 8px;
+    }
+
+    .feature-limit input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-top: 5px;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+    }
+
+    .feature-limit input::-webkit-outer-spin-button,
+    .feature-limit input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .card-submit-btn {
+        margin-top: auto;
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .card-submit-btn button {
+        background: #4C84FF;
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .card-submit-btn button:hover {
+        background: #3b6ee8;
+    }
+</style>
+
+<div class="settings-container">
+    <div class="feature-grid" id="featureGrid">
+      
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layer', 'jquery'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        function createFeatureCard(item) {
+            let selectOptions;
+            let nameText = item.name;
+            
+            if(item.type == 3) {
+
+                selectOptions = `
+                    <option value="0">关闭广告</option>
+                    <option value="1">开启广告</option>
+                `;
+                nameText = '下载高清证件照';
+    
+            } else if(item.type == 1 || item.type == 2){
+                selectOptions = `
+                    <option value="0">关闭功能</option>
+                    <option value="1">开启功能</option>
+                `;
+            }else{
+                selectOptions = `
+                    <option value="0">关闭功能</option>
+                    <option value="1">开启功能</option>
+                    <option value="2">次数限制</option>
+                `;
+            }
+            
+            let cardContent = `
+                <div class="feature-card" data-type="${item.type}" data-id="${item.id}">
+                    <img src="../statics/images/explore/${item.type}.png" class="feature-img">
+                    <div class="feature-name">${nameText}</div>
+                    <div style="color: #666; font-size: 14px; margin: 8px 0;">功能限制</div>
+                    <div class="feature-status">
+                        <div class="layui-form">
+                            <select name="status_${item.type}" lay-filter="status" lay-verify="required">
+                                ${selectOptions}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="feature-limit">
+                        每日免费次数：<input type="number" min="0" step="1" name="counts_${item.type}" placeholder="请输入整数" class="layui-input">
+                    </div>
+                    <div class="card-submit-btn">
+                        <button type="button" class="save-card" data-type="${item.type}">保存</button>
+                    </div>
+                </div>
+            `;
+            
+            return cardContent;
+        }
+
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: domain+'admin/getExploreSet',
+                headers: {
+                    'token': localStorage.getItem('token')
+                },
+                success: function(exploreRes) {
+                    if (exploreRes.code == 200) {
+                        var featureGrid = $('#featureGrid');
+                        featureGrid.empty();
+                        exploreRes.data.forEach(function(item) {
+                            featureGrid.append(createFeatureCard(item));
+                            $(`select[name='status_${item.type}']`).val(item.status);
+                            $(`input[name='counts_${item.type}']`).val(item.counts);
+                        });
+                        form.render('select');
+                    } else if(exploreRes.code == 404) {
+                        layer.alert(exploreRes.data);
+                    } else {
+                        localStorage.setItem('token', null);
+                        location.href = "/index.html";
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.save-card', function() {
+            var type = $(this).data('type');
+            var card = $(this).closest('.feature-card');
+            var id = card.data('id');
+            
+            var status = parseInt(card.find(`select[name='status_${type}']`).val());
+            var counts = parseInt(card.find(`input[name='counts_${type}']`).val() || 0);
+            
+            var postData = {
+                id: id,
+                type: type,
+                status: status,
+                counts: counts
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: domain+'admin/updateExploreSet',
+                contentType: 'application/json',
+                data: JSON.stringify(postData),
+                dataType: 'json',
+                headers: {
+                    'token': localStorage.getItem('token')
+                },
+                success: function (response) {
+                    if (response.code == 200) {
+                        layer.msg('保存成功');
+                    } else if(response.code == 404) {
+                        layer.alert(response.data);
+                    } else {
+                        localStorage.setItem('token', null);
+                        location.href = "/index.html";
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script src="./foot.js" charset="utf-8"></script>

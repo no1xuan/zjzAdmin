@@ -6,115 +6,188 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" href="statics/images/favicon.ico">
     <link rel="stylesheet" href="statics/css/site.css">
-	<script src="statics/web.js"></script>
-	<script src="statics/lib/jquery.min.js"></script>
-	<script src="statics/lib/layui/layui.all.js"></script>
-    <script>
-    </script>
+    <script src="statics/web.js"></script>
+    <script src="statics/lib/jquery.min.js"></script>
+    <script src="statics/lib/layui/layui.all.js"></script>
     <style>
-        /* 通用页面布局 */
         html, body {
             height: 100%;
             margin: 0;
+            background: #f0f2f5;
+            background: #ecedf0 url("statics/images/bj.png") fixed;
+            background-repeat: repeat;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #f0f2f5;
-			background:#ecedf0 url("statics/images/bj.png") fixed;
-			background-repeat:repeat;
         }
 
-        .layadmin-user-login-main {
-            width: 680px;
-		    height: 500px;
+        .login-container {
+            display: flex;
+            width: 900px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .login-left {
+            flex: 1;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            background: linear-gradient(135deg, #4C84FF 0%, #3b6ee8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
         }
 
-        .layadmin-user-login-header h2 {
+        .login-left h1 {
+            font-size: 36px;
             margin-bottom: 20px;
+        }
+
+        .login-left p {
+            font-size: 16px;
+            text-align: center;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-right h2 {
             font-size: 28px;
             color: #333;
+            margin-bottom: 30px;
         }
 
-        .layadmin-user-login-body p {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 20px;
+        .scan-tip {
             display: flex;
             align-items: center;
-            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: #666;
         }
 
-        .layadmin-user-login-body p img {
-            width: 55px;
-            height: 45px
+        .scan-tip img {
+            width: 45px;
+            height: 45px;
             margin-left: 10px;
         }
 
-        .layadmin-user-login-body img.qr-code {
-            display: block;
-            margin: 0 auto;
-            width: 300px;
-            height: 300px;
+        .qr-code {
+            width: 240px;
+            height: 240px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         @media screen and (max-width: 768px) {
-            .layadmin-user-login-main {
-                width: 300px;
-                padding: 20px;
+            .login-container {
+                width: 90%;
+                max-width: 400px;
+                height: auto;
+                flex-direction: column;
             }
-            
-            .layadmin-user-login-body img.qr-code {
-                width: 150px;
-                height: 150px;
+
+            .login-left {
+                padding: 30px 20px;
+            }
+
+            .login-left h1 {
+                font-size: 28px;
+            }
+
+            .login-right {
+                padding: 30px 20px;
+            }
+
+            .qr-code {
+                width: 180px;
+                height: 180px;
             }
         }
+
+        body{cursor:url('statics/images/XSSB-1.cur'), auto;}
+        a{cursor:url('statics/images/XSSB-2.cur'), auto;}
     </style>
 </head>
 <body>
-<div class="layadmin-user-login-main">
-    <div class="layadmin-user-login-header">
-        <h2>登录</h2>
+    <div class="login-container">
+        <div class="login-left">
+            <h1 id="greetingText"></h1>
+            <p>请使用管理员微信扫一扫登录，登录成功后将自动挤掉其它端登录状态</p>
+        </div>
+        <div class="login-right">
+            <h2>微信扫码登录</h2>
+            <div class="scan-tip">
+                请使用微信扫一扫
+                <img src="statics/images/img-4.gif" alt="Scan Icon"/>
+            </div>
+            <img class="qr-code" src="" alt="登录二维码加载中..."/>
+        </div>
     </div>
-    <div class="layadmin-user-login-body layui-form">
-        <p>请使用微信扫一扫&nbsp; <img src="statics/images/img-4.gif" alt="Scan Icon"/></p>
-        <img class="qr-code" src="" alt="登录二维码加载中..."/>
-    </div>
-</div>
+
 <script>
-  var token = localStorage.getItem('token');
-	if(token!=null && token!='null'){
-	   console.log(token);
-		location.href = "user/index.html";
-	}
+    // 根据时间设置问候语
+    function setGreeting() {
+        const hour = new Date().getHours();
+        let greeting;
+        if (hour >= 6 && hour < 12) {
+            greeting = "早上好 🌅";
+        } else if (hour >= 12 && hour < 13) {
+            greeting = "中午好 ☀️"; 
+        } else if (hour >= 13 && hour < 18) {
+            greeting = "下午好 🌞";
+        } else if (hour >= 18 && hour < 23) {
+            greeting = "晚上好 🌙";
+        } else {
+            greeting = "夜深了，注意休息 😴";
+        }
+        document.getElementById("greetingText").innerText = greeting;
+    }
+    setGreeting();
+
+    var token = localStorage.getItem('token');
+    if(token!=null && token!='null'){
+        console.log(token);
+        location.href = "user/index.html";
+    }
     $.get(domain + "admin/login", {}, function(data) {
         if (data.code == 200) {
             $('.qr-code').attr('src', data.data.pic);
-			startCheckLogin(data.data.code);  // 开始检查登录状态
-			
+            startCheckLogin(data.data.code);  // 开始检查登录状态
+            
         } else {
             layer.msg("二维码获取失败，请刷新重试");
         }
     });
-	
-	    function startCheckLogin(code) {
-	        const interval = setInterval(function() {
-	            $.get(domain + "admin/checkLogin", {code:code}, function(data) {
-	                if (data.code == 200) {
-	                    clearInterval(interval);
-						localStorage.setItem('token', data.data);
-						layer.msg("登录成功，正在跳转中...", {time: 1500}, function(){
-						location.href = "user/index.html";
-						});
-	                }
-	            });
-	        }, 1000);
-	    }
+    
+    function startCheckLogin(code) {
+        const interval = setInterval(function() {
+            $.get(domain + "admin/checkLogin", {code:code}, function(data) {
+                if (data.code == 200) {
+                    clearInterval(interval);
+                    localStorage.setItem('token', data.data);
+                    layer.msg("登录成功，正在跳转中...", {time: 1500}, function(){
+                        location.href = "user/index.html";
+                    });
+                }
+            });
+        }, 1000);
+    }
 </script>
 
 </body>

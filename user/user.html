@@ -58,7 +58,7 @@
                 },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.code === 200) {
+                    if (res.code == 200) {
                         // 渲染表格
                         table.render({
                             elem: '#table',
@@ -72,7 +72,13 @@
                                 {field: 'avatarUrl', title: '用户头像', templet: function(d) {
                                     return d.avatarUrl ? '<img src="'+ d.avatarUrl +'" style="height: 35px;">' : '无';
                                 }},
-                                {field: 'createTime', title: '创建时间'}
+                                {field: 'status', title: '状态', templet: function(d) {
+                                    return d.status === 1 ? '正常' : '禁止登录';
+                                }},
+                                {field: 'createTime', title: '创建时间'},
+                            {field: 'action', title: '操作', width: 150, templet: function(d) {
+                                return '<button class="layui-btn layui-btn-xs" lay-event="recover">正常</button><button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="ban">禁止</button>';
+                            }}
                             ]],
 
                             limit: pageSize,
@@ -97,6 +103,7 @@
                             }
                         });
                     }else{
+                        localStorage.setItem('token', null);
 					    location.href = "/index.html";
 					}
                 }
@@ -114,6 +121,33 @@
             loadTable();
         });
 
+        // 监听表格工具事件
+        table.on('tool(table)', function(obj){
+            var data = obj.data;
+            var event = obj.event;
+            if(event === 'recover' || event === 'ban'){
+                var type = event === 'recover' ? 1 : 2; // 1为正常，2为禁止
+                $.ajax({
+                    type: 'POST',
+                    url: domain+'admin/updateUserStatus',
+                    data: {
+                        userId: data.id,
+                        type: type
+                    },
+                    headers: {
+                        'token': localStorage.getItem('token')
+                    },
+                    success: function (res) {
+                        if (res.code == 200) {
+                            layer.msg('操作成功');
+                            loadTable();
+                        } else {
+                            layer.msg('操作成功');
+                        }
+                    }
+                });
+            }
+        });
     });
 </script>
 <script src="./foot.js" charset="utf-8"></script>
