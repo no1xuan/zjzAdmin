@@ -119,20 +119,21 @@
         function createFeatureCard(item) {
             let selectOptions;
             let nameText = item.name;
+            let showLimit = true;
             
             if(item.type == 3) {
-
                 selectOptions = `
                     <option value="0">关闭广告</option>
                     <option value="1">开启广告</option>
                 `;
                 nameText = '下载高清证件照';
-    
+                showLimit = false;
             } else if(item.type == 1 || item.type == 2){
                 selectOptions = `
                     <option value="0">关闭功能</option>
                     <option value="1">开启功能</option>
                 `;
+                showLimit = false;
             }else{
                 selectOptions = `
                     <option value="0">关闭功能</option>
@@ -145,7 +146,7 @@
                 <div class="feature-card" data-type="${item.type}" data-id="${item.id}">
                     <img src="../statics/images/explore/${item.type}.png" class="feature-img">
                     <div class="feature-name">${nameText}</div>
-                    <div style="color: #666; font-size: 14px; margin: 8px 0;">功能限制</div>
+                    <div style="color: #666; font-size: 14px; margin: 8px 0;">开关</div>
                     <div class="feature-status">
                         <div class="layui-form">
                             <select name="status_${item.type}" lay-filter="status" lay-verify="required">
@@ -153,9 +154,11 @@
                             </select>
                         </div>
                     </div>
+                    ${showLimit ? `
                     <div class="feature-limit">
                         每日免费次数：<input type="number" min="0" step="1" name="counts_${item.type}" placeholder="请输入整数" class="layui-input">
                     </div>
+                    ` : `<input type="hidden" name="counts_${item.type}" value="0">`}
                     <div class="card-submit-btn">
                         <button type="button" class="save-card" data-type="${item.type}">保存</button>
                     </div>
