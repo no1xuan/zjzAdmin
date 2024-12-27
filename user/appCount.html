@@ -146,6 +146,7 @@
 </div>
 
 <script>
+	
 $.ajax({
     url: domain + 'admin/exploreIndexAdmin',
     type: 'POST',
@@ -163,7 +164,8 @@ $.ajax({
             document.getElementById('imageuploadCount').innerHTML = res.data.imageuploadCount;
             document.getElementById('imageCount').innerHTML = res.data.imageCount;
         } else {
-            layer.msg(" ˝æ›º”‘ÿ ß∞‹");
+            localStorage.setItem('token', null);
+            location.href = "/index.html";
         }
     }
 });
