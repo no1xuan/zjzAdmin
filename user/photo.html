@@ -15,6 +15,12 @@
                     <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
                 </div>
             </div>
+            <div class="layui-col-md4">
+                <label class="layui-form-label">用户ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="userId" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
                 <i class="layui-icon">&#xe615;</i>筛选
             </button>
@@ -45,6 +51,7 @@
         var pageNum = 1;   // 当前页码
         var pageSize = 15; // 每页显示数量
         var name = '';     // 搜索关键词
+        var userId = 0;   // 用户ID搜索关键词
 
         function loadTable() {
             $.ajax({
@@ -53,7 +60,8 @@
                 data: {
                     pageNum: pageNum,
                     pageSize: pageSize,
-                    name: name
+                    name: name,
+                    userId: userId
                 },
                 headers: {
                     'token': localStorage.getItem('token')
@@ -92,7 +100,7 @@
                                     layer.open({
                                         type: 1,
                                         title: '图片查看',
-                                        area: ['360px', '480px'],  // 调整为适合证件照的尺寸
+                                        area: ['360px', '480px'],
                                         content: '<img src="'+data.nimg+'" style="width: 100%; height: auto; max-height: 100%;">'
                                     });
                                 });
@@ -130,6 +138,7 @@
         form.on('submit(search)', function (data) {
             var where = data.field;
             name = where.name || ''; 
+            userId = where.userId || 0;
             pageNum = 1;             
             loadTable();             
         });

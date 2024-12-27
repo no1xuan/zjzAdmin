@@ -10,13 +10,13 @@
     <form class="layui-form" lay-filter="userSearch" action="">
         <div class="layui-row" style="padding: 5px 10px;">
             <div class="layui-col-md4">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label">用户ID</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <input type="text" name="userId" placeholder="请输入" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
-                <i class="layui-icon">&#xe615;</i>筛选
+                <i class="layui-icon">&#xe615;</i>精准搜索
             </button>
         </div>
     </form>
@@ -43,7 +43,7 @@
 
         var pageNum = 1;   // 当前页码
         var pageSize = 15; // 每页显示数量
-        var name = '';     // 搜索关键词
+        var userId = 0;     // 搜索关键词
 
         function loadTable() {
             $.ajax({
@@ -52,7 +52,7 @@
                 data: {
                     pageNum: pageNum,
                     pageSize: pageSize,
-                    name: name
+                    userId: userId
                 },
                 headers: {
                     'token': localStorage.getItem('token')
@@ -111,7 +111,7 @@
         // 搜索表单提交事件
         form.on('submit(search)', function (data) {
             var where = data.field;
-            name = where.name || ''; 
+            userId = where.userId || 0; 
             pageNum = 1;             
             loadTable();             
         });

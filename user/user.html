@@ -4,6 +4,21 @@
         height: auto;
         line-height: normal;
     }
+    /* 添加控制面板样式 */
+    .control-panel {
+        padding: 20px;
+    }
+    .control-panel .layui-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+    .control-panel .btn-group {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .control-panel .btn-group:last-child {
+        margin-bottom: 0;
+    }
 </style>
 
 <div class="layui-fluid">
@@ -13,6 +28,12 @@
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <label class="layui-form-label">用户ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="userId" placeholder="请输入" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
@@ -43,6 +64,7 @@
         var pageNum = 1;   // 当前页码
         var pageSize = 15; // 每页显示数量
         var name = '';     // 搜索关键词
+        var userId = 0;    // 用户ID搜索关键词
 
         function loadTable() {
             $.ajax({
@@ -51,7 +73,8 @@
                 data: {
                     pageNum: pageNum,
                     pageSize: pageSize,
-                    name: name
+                    name: name,
+                    userId: userId
                 },
                 headers: {
                     'token': localStorage.getItem('token')
@@ -73,12 +96,12 @@
                                     return d.avatarUrl ? '<img src="'+ d.avatarUrl +'" style="height: 35px;">' : '无';
                                 }},
                                 {field: 'status', title: '状态', templet: function(d) {
-                                    return d.status === 1 ? '正常' : '禁止登录';
+                                    return d.status == 1 ? '正常' : '禁止登录';
                                 }},
                                 {field: 'createTime', title: '创建时间'},
-                            {field: 'action', title: '操作', width: 150, templet: function(d) {
-                                return '<button class="layui-btn layui-btn-xs" lay-event="recover">正常</button><button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="ban">禁止</button>';
-                            }}
+                                {field: 'action', title: '操作', width: 120, templet: function(d) {
+                                    return '<button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="control">控制面板</button>';
+                                }}
                             ]],
 
                             limit: pageSize,
@@ -117,6 +140,7 @@
         form.on('submit(search)', function (data) {
             var where = data.field;
             name = where.name || '';
+            userId = where.userId || 0;
             pageNum = 1;
             loadTable();
         });
@@ -125,29 +149,73 @@
         table.on('tool(table)', function(obj){
             var data = obj.data;
             var event = obj.event;
-            if(event === 'recover' || event === 'ban'){
-                var type = event === 'recover' ? 1 : 2; // 1为正常，2为禁止
-                $.ajax({
-                    type: 'POST',
-                    url: domain+'admin/updateUserStatus',
-                    data: {
-                        userId: data.id,
-                        type: type
-                    },
-                    headers: {
-                        'token': localStorage.getItem('token')
-                    },
-                    success: function (res) {
-                        if (res.code == 200) {
-                            layer.msg('操作成功');
-                            loadTable();
-                        } else {
-                            layer.msg('操作成功');
-                        }
-                    }
+            if(event === 'control'){
+                layer.open({
+                    type: 1,
+                    title: '您正在操作' + '  (ID:' + data.id + ')  的用户',
+                    area: ['500px', '430px'],
+                    content: '<div class="control-panel">' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-primary" onclick="handleUserAction(' + data.id + ', 1)">踢掉登录状态</button>' +
+                            '</div>' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-primary" onclick="handleUserAction(' + data.id + ', 2)">删除定制记录</button>' +
+                            '</div>' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-primary" onclick="handleUserAction(' + data.id + ', 3)">删除保存记录</button>' +
+                            '</div>' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-primary" onclick="handleUserAction(' + data.id + ', 4)">删除行为记录</button>' +
+                            '</div>' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-danger" onclick="handleUserAction(' + data.id + ', 5)">禁止登录并踢掉登录</button>' +
+                            '</div>' +
+                            '<div class="btn-group">' +
+                            '<button class="layui-btn layui-btn-normal" onclick="handleUserAction(' + data.id + ', 6)">恢复登录</button>' +
+                            '</div>' +
+                            '</div>'
                 });
             }
         });
     });
+
+    
+    function handleUserAction(userId, type) {
+        // 添加加载层
+        var loadIndex = layer.load(1, {
+            shade: [0.5,'#000'] // 0.5透明度的黑色背景
+        });
+        
+        // 添加提示文字
+        layer.msg('正在处理，请耐心等待，请勿退出', {
+            icon: 16,
+            shade: 0.01,
+            time: 0
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: domain+'admin/updateUserStatus',
+            data: {
+                userId: userId,
+                type: type
+            },
+            headers: {
+                'token': localStorage.getItem('token')
+            },
+            success: function (res) {
+                // 关闭加载层和提示
+                layer.close(loadIndex);
+                layer.closeAll('msg');
+                layer.msg(res.data);
+            },
+            error: function() {
+                // 关闭加载层和提示
+                layer.close(loadIndex);
+                layer.closeAll('msg');
+                layer.msg('操作失败，请重试');
+            }
+        });
+    }
 </script>
 <script src="./foot.js" charset="utf-8"></script>

@@ -84,14 +84,14 @@
             <div class="layui-col-sm4 layui-col-md4">
                 <div class="layui-card">
                     <div class="layui-card-header">
-                        照片清晰增强
+                        图片编辑
                         <span class="layui-badge layui-bg-red layuiadmin-badge">总量</span>
                     </div>
                     <div class="layui-card-body layuiadmin-card-list">
-                        <p class="layuiadmin-big-font" id="imageDefinitionEnhanceCount">0</p>
+                        <p class="layuiadmin-big-font" id="editImageCount">0</p>
                         <p>
-                            照片清晰增强总次数
-                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-refresh"></i></span>
+                            图片编辑总次数
+                            <span class="layuiadmin-span-color"><i class="layui-inline layui-icon layui-icon-edit"></i></span>
                         </p>
                     </div>
                 </div>
@@ -158,7 +158,7 @@ $.ajax({
             document.getElementById('generateLayoutCount').innerHTML = res.data.generateLayoutCount;
             document.getElementById('colourizeCount').innerHTML = res.data.colourizeCount;
             document.getElementById('mattingCount').innerHTML = res.data.mattingCount;
-            document.getElementById('imageDefinitionEnhanceCount').innerHTML = res.data.imageDefinitionEnhanceCount;
+            document.getElementById('editImageCount').innerHTML = res.data.editImageCount;
             document.getElementById('cartoonCount').innerHTML = res.data.cartoonCount;
             document.getElementById('imageuploadCount').innerHTML = res.data.imageuploadCount;
             document.getElementById('imageCount').innerHTML = res.data.imageCount;

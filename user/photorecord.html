@@ -12,7 +12,7 @@
             <div class="layui-col-md4">
                 <label class="layui-form-label">用户ID</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <input type="text" name="userId" placeholder="请输入" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <button lay-filter="search" lay-submit type="button" class="layui-btn layui-btn-blue" style="margin-left: 10px;">
@@ -43,7 +43,7 @@
 
         var pageNum = 1;   // 当前页码
         var pageSize = 15; // 每页显示数量
-        var name = '';     // 搜索关键词
+        var userId = 0;     // 搜索关键词
 
         function loadTable() {
             $.ajax({
@@ -52,7 +52,7 @@
                 data: {
                     pageNum: pageNum,
                     pageSize: pageSize,
-                    userId: name
+                    userId: userId
                 },
                 headers: {
                     'token': localStorage.getItem('token')
@@ -78,7 +78,7 @@
                                         6: '智能抠图',
                                         7: '六寸排版照',
                                         8: '动漫风照',
-                                        9: '照片清晰增强',
+                                        9: '图片编辑',
                                         10: '上传图片'
                                     };
                                     return typeMap[d.type];
@@ -122,7 +122,7 @@
         // 搜索表单提交事件
         form.on('submit(search)', function (data) {
             var where = data.field;
-            name = where.name || ''; 
+            userId = where.userId || 0; 
             pageNum = 1;             
             loadTable();             
         });
