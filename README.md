@@ -1,7 +1,7 @@
 # 项目介绍
 
 # <p align="center">小程序管理员后台</p>
-<p align="center">一码连接小程序，数据增长了如指掌</p>
+<p align="center">2025我们一起加油，心如所愿，梦想成真.</p>
 <p align="center"><img src="./img/1.png"></p>
 
 
